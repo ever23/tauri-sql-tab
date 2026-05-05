@@ -1,0 +1,25 @@
+{
+  "name": "tauri-sql-tab",
+  "version": "1.0.0",
+  "description": "Interface de alto nivel para consultas SQL en Tauri usando tauri-plugin-sql",
+  "main": "tauri-sql-tab.js",
+  "type": "module",
+  "keywords": [
+    "sql",
+    "tauri",
+    "sqlite",
+    "dbtabla"
+  ],
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "sqlite3": "^5.1.7"
+  },
+  "dependencies": {
+    "dbtabla": "^2.1.2",
+    "tabla-model": "^2.0.0"
+  }
+}
