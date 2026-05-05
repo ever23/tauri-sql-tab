@@ -4,6 +4,16 @@
   "description": "Interface de alto nivel para consultas SQL en Tauri usando tauri-plugin-sql",
   "main": "tauri-sql-tab.js",
   "type": "module",
+  "files": [
+    "lib/",
+    "tauri-sql-tab.js",
+    "README.md",
+    "license"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ever23/tauri-sql-tab.git"
+  },
   "keywords": [
     "sql",
     "tauri",
