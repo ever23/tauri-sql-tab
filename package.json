@@ -1,6 +1,6 @@
 {
   "name": "tauri-sql-tab",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Interface de alto nivel para consultas SQL en Tauri usando tauri-plugin-sql",
   "main": "tauri-sql-tab.js",
   "type": "module",
