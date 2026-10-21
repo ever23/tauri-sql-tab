@@ -47,12 +47,39 @@ const usuarios = db.tabla('usuarios');
 await usuarios.insert({ user: 'admin', tipo: 'root' });
 ```
 
-### Consultas Select (Lógica Polimórfica)
-| Si el 1er parámetro es... | Se interpreta como... | Ejemplo |
-| :--- | :--- | :--- |
-| **String** | Cláusula `WHERE` | `tabla.select("id > 10")` |
-| **Array** | Lista de `CAMPOS` | `tabla.select(["user", "tipo"])` |
-| **Object** | Definición de `JOINS` | `tabla.select({ "=perfil": "u.id = p.id_user" })` |
+### Consultas Select: Sintaxis de Objeto ?nico (REGLA MANDATORIA PARA EL AGENTE)
+
+**Prioridad Absoluta:** Usa **siempre** la sintaxis de objeto ?nico `{ where, campos, joins, order, limit }` al llamar a `.select()`, `.selectOne()` o `.busqueda()`. Esto garantiza cero errores de ambig?edad con par?metros posicionales.
+
+```javascript
+// Consulta est?ndar recomendada para el agente:
+const resultados = await usuarios.select({
+    where: { 
+        "estado": "activo", 
+        "puntos>": 50,       // Sufijo > para mayor que
+        "||nombre%": "A%"    // Prefijo || para OR, sufijo % para LIKE
+    },
+    campos: ["id", "nombre", "email"],
+    joins: { ">perfiles": "perfiles.id_user = usuarios.id" }, // > = LEFT JOIN
+    order: "id DESC",
+    limit: 10
+});
+```
+
+#### Operadores en `where`:
+* **Sufijos de comparaci?n**: `campo%` (LIKE), `campo!` (!=), `campo>` (>), `campo<` (<), `campo>=` (>=), `campo<=` (<=).
+* **Prefijos l?gicos**: `||campo` (OR), `&&campo` (AND por defecto).
+
+<details>
+<summary>Sintaxis Posicional Alternativa (Legacy)</summary>
+
+Si usas la firma posicional `select(campos, joins, where)` y deseas filtrar con objeto sin definir campos ni joins, debes pasar `null`:
+```javascript
+// Posicional: (campos, joins, where)
+await usuarios.select(null, null, { "activo": 1 });
+```
+*(Evita este modo si puedes; prefiere la sintaxis de objeto ?nico)*.
+</details>
 
 ### Búsqueda Inteligente (LIKE)
 ```javascript

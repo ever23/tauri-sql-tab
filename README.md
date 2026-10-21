@@ -117,21 +117,42 @@ const usuarios = db.tabla('usuarios');
 await usuarios.insert({ nombre: 'Antigravity', email: 'anti@example.com' });
 ```
 
-#### Consultas (Select)
+#### Consultas: Sintaxis de Objeto ?nico (Recomendada)
+La forma principal y m?s limpia de consultar datos en Tauri con `tauri-sql-tab` es pasando un ?nico objeto con propiedades nombradas:
+
 ```javascript
-// Búsqueda simple
+const resultados = await usuarios.select({
+    where: { 
+        "nombre%": "Anti%",           // Sufijo % = LIKE
+        "||email!": "test@test.com",  // Prefijo || = OR, sufijo ! = !=
+        "edad>=": 18                  // Sufijo >=
+    },
+    campos: ["id", "nombre", "email"],
+    order: "id DESC",
+    limit: 10
+});
+```
+
+#### B?squedas por ID y B?squeda Inteligente:
+```javascript
+// B?squeda directa por clave primaria:
+const user = await usuarios.selectById(1);
+
+// B?squeda inteligente (LIKE en varias columnas):
+const encontrados = await usuarios.busqueda("Antigravity", ["nombre"]);
+```
+
+<details>
+<summary><b>Sintaxis Posicional Alternativa (Legacy)</b></summary>
+
+```javascript
+// Filtro directo string:
 const lista = await usuarios.select("id > 0");
 
-// Búsqueda con objeto (Where avanzado)
-// Sufijos: % (LIKE), ! (!=), > (>), < (<)
-const resultados = await usuarios.select(null, null, { 
-    "nombre%": "Anti%", 
-    "||email!": "test@test.com" 
-});
-
-// Búsqueda por ID
-const user = await usuarios.selectById(1);
+// Si usas objeto en sintaxis posicional sin campos ni joins, usa null:
+const filtrados = await usuarios.select(null, null, { "activo": 1 });
 ```
+</details>
 
 #### Actualización y Borrado
 ```javascript

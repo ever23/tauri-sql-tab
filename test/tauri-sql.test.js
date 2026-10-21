@@ -96,7 +96,7 @@ describe("Tests de Integración tauri-sql-tab (Estilo sqlite3-tab)", async () =>
         });
     });
 
-    it('silumacion de AUTO_INCREMENT usando modelos', async () => {
+    it('simulación de AUTO_INCREMENT usando modelos', async () => {
         const mock = new TauriMock();
         const db = new tauriSqlTab(mock);
         db.pathModels(path.join(__dirname, "modelo"));
