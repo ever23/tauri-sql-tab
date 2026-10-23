@@ -100,18 +100,18 @@ class tauriSqlTab extends Connect {
         try {
             const result = await this.query(`${this._information_schema}'${table}'`);
             
-            try {
-                return await this.inModel(table, result.length === 0);
-            } catch (e) {
-                if (e === undefined) {
-                    if (result.length === 0) {
+            if (result.length === 0) {
+                try {
+                    return await this.inModel(table, true);
+                } catch (e) {
+                    if (e === undefined) {
                         throw new Error("la tabla no existe");
                     } else {
-                        return (new model(result[0].sql, this._escapeChar)).getData();
+                        throw e;
                     }
-                } else {
-                    throw e;
                 }
+            } else {
+                return (new model(result[0].sql, this._escapeChar)).getData();
             }
         } catch (error) {
             throw error;
