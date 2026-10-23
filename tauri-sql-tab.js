@@ -47,11 +47,13 @@ class tauriSqlTab extends Connect {
      * @return {Promise}
      */
     async query(query, params = []) {
-        if (/^[\s]*select/i.test(query)) {
-            return await this.connection.select(query, params);
-        } else {
-            return await this.connection.execute(query, params);
-        }
+        return await this._executeWithTiming(query, async () => {
+            if (/^[\s]*select/i.test(query)) {
+                return await this.connection.select(query, params);
+            } else {
+                return await this.connection.execute(query, params);
+            }
+        });
     }
 
     async beginTransaction() {
@@ -70,8 +72,10 @@ class tauriSqlTab extends Connect {
      * Obtiene una sola fila
      */
     async get(query, params = []) {
-        const result = await this.connection.select(query, params);
-        return result && result.length > 0 ? result[0] : null;
+        return await this._executeWithTiming(query, async () => {
+            const result = await this.connection.select(query, params);
+            return result && result.length > 0 ? result[0] : null;
+        });
     }
 
     /**
