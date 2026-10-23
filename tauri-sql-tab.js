@@ -98,9 +98,8 @@ class tauriSqlTab extends Connect {
      */
     async _keysInTable(table) {
         try {
-            const result = await this.query(`${this._information_schema}'${table}'`);
-            
-            if (result.length === 0) {
+            const rows = await this.query(`PRAGMA table_info('${table}')`);
+            if (!rows || rows.length === 0) {
                 try {
                     return await this.inModel(table, true);
                 } catch (e) {
@@ -111,7 +110,20 @@ class tauriSqlTab extends Connect {
                     }
                 }
             } else {
-                return (new model(result[0].sql, this._escapeChar)).getData();
+                const colums = rows.map(r => ({
+                    name: r.name,
+                    type: (r.type || 'text').toLowerCase(),
+                    defaultNull: r.notnull === 0,
+                    primary: r.pk > 0,
+                    unique: false,
+                    defaul: r.dflt_value !== null && r.dflt_value !== undefined ? String(r.dflt_value) : ""
+                }));
+                return {
+                    tabla: table,
+                    colums: colums,
+                    columns: colums,
+                    colum: colums
+                };
             }
         } catch (error) {
             throw error;
