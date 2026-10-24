@@ -1,6 +1,6 @@
 {
   "name": "tauri-sql-tab",
-  "version": "1.0.5",
+  "version": "1.1.0-beta.0",
   "description": "Interface de alto nivel para consultas SQL en Tauri usando tauri-plugin-sql",
   "main": "tauri-sql-tab.js",
   "types": "tauri-sql-tab.d.ts",
@@ -30,7 +30,7 @@
     "sqlite3": "^5.1.7"
   },
   "dependencies": {
-    "dbtabla": "^2.2.9",
-    "tabla-model": "^2.0.5"
+    "dbtabla": "^2.3.0-beta.0",
+    "tabla-model": "^2.1.0-beta.0"
   }
 }
